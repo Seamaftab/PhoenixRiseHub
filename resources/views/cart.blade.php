@@ -173,7 +173,7 @@
                 const unitPrice = quantity.parentElement.parentElement.nextElementSibling;
                 const updatedPrice = parseFloat(unitPrice.innerText) * updatedQuantity;
 
-                unitPrice.nextElementSibling.innerText = updatedPrice;
+                unitPrice.nextElementSibling.innerText = updatedPrice.toFixed(2);
 
                 updatingPrice();
 
@@ -201,7 +201,7 @@
                 const unitPrice = quantity.parentElement.parentElement.nextElementSibling;
                 const updatedPrice = parseFloat(unitPrice.innerText) * updatedQuantity;
 
-                unitPrice.nextElementSibling.innerText = updatedPrice;
+                unitPrice.nextElementSibling.innerText = updatedPrice.toFixed(2);
 
                 updatingPrice();
 
