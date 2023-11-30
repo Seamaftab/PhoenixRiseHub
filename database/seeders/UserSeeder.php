@@ -31,6 +31,12 @@ class UserSeeder extends Seeder
             'password' => '11223344',
             'role_id' => 2,
         ]);
+        User::factory()->create([
+            'name' => 'Rick Astley',
+            'email' => 'nevergonna@gmail.com',
+            'password' => '11223344',
+            'role_id' => 3,
+        ]);
         User::factory(5)->create();
     }
 }

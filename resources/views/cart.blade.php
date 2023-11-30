@@ -1,27 +1,27 @@
 <x-frontend.master>
     <x-slot name="title">Cart - {{ auth()->user()->name }}</x-slot>
 
-    @if ($bags->cartItems->isEmpty())
+    <form action="{{ route('orders.store') }}" method="POST">
+        @csrf
         <div class="container mt-4">
+            @if($bags->cartItems->isEmpty())
             <div class="row">
                 <div class="col-md-6">
-                    <a href="{{ route('welcome') }}" class="btn btn-secondary">Back to Home</a>
+                    <a href="{{ route('welcome') }}" class="btn btn-outline-dark">Back to Home</a>
                 </div>
             </div>
             <h2>Cart is empty</h2>
-        </div>
-    @else
-        <form action="{{ route('orders.store') }}" method="POST">
-            @csrf
-            <div class="container mt-4">
+            @else
                 <h2 class="py-2">Your Cart</h2>
                 <div class="row py-2">
                     <div class="col-md-6">
-                        <a href="{{ route('welcome') }}" class="btn btn-secondary">Back to Home</a>
+                        <a href="{{ route('welcome') }}" class="btn btn-outline-dark">Back to Home</a>
                     </div>
                 </div>
                 <div class="table-responsive">
+                    <!-- Cart items table -->
                     <table class="table table-bordered">
+                        <!-- Table headers -->
                         <thead>
                             <tr>
                                 <th>Serial</th>
@@ -33,40 +33,46 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <!-- Cart items -->
                             @php $totalPrice = 0; @endphp
                             @foreach ($bags->cartItems as $index => $item)
-                            <tr>
-                                <input type="hidden" name="products[{{ $index }}][cart_item_id]" value="{{ $item->id }}">
-                                <td>{{ $index + 1 }}</td>
-                                <td>{{ $item->product->title }}</td>
-                                <td>
-                                    <div class="input-group">
-                                        <span class="input-group-btn">
-                                            <button type="button" class="btn btn-sm btn-danger minus-btn">-</button>
-                                        </span>
-
-                                        <input 
-                                            type="number" 
-                                            class="form-control text-center" 
-                                            name="products[{{ $index }}][quantity]" 
-                                            value="{{ $item->quantity }}"
-                                            data-id="{{ $item->id }}"
-                                        >
-
-                                        <span class="input-group-btn">
-                                            <button type="button" class="btn btn-sm btn-success plus-btn">+</button>
-                                        </span>
-                                    </div>
-                                </td>
-                                <td class="unit-price">{{ $item->product->price }}</td>
-                                <td class="price">{{ $item->product->price * $item->quantity }}</td>
-                                <td class="btn btn-sm btn-outline-danger remove-btn" data-id="{{$item->id}}">
-                                    Remove
-                                </td>
-                            </tr>
-                            @php $totalPrice += ($item->product->price * $item->quantity); @endphp
+                                <!-- Cart item row -->
+                                <tr>
+                                    <!-- Hidden input for cart item id -->
+                                    <input type="hidden" name="products[{{ $index }}][cart_item_id]" value="{{ $item->id }}">
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $item->product->title }}</td>
+                                    <!-- Quantity input -->
+                                    <td>
+                                        <!-- Quantity adjustment buttons -->
+                                        <div class="input-group">
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-sm btn-danger minus-btn">-</button>
+                                            </span>
+                                            <input 
+                                                type="number" 
+                                                class="form-control text-center" 
+                                                name="products[{{ $index }}][quantity]" 
+                                                value="{{ $item->quantity }}"
+                                                data-id="{{ $item->id }}"
+                                            >
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-sm btn-success plus-btn">+</button>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td class="unit-price">{{ $item->product->price }}</td>
+                                    <td class="price">{{ $item->product->price * $item->quantity }}</td>
+                                    <!-- Remove button -->
+                                    <td class="remove-btn" data-id="{{$item->id}}">
+                                        <button type="button" class="btn btn-sm btn-danger">Remove</button>
+                                    </td>
+                                </tr>
+                                <!-- Calculate total price -->
+                                @php $totalPrice += ($item->product->price * $item->quantity); @endphp
                             @endforeach
                         </tbody>
+                        <!-- Table footer for total -->
                         <tfoot>
                             <tr>
                                 <td colspan="3"></td>
@@ -77,9 +83,11 @@
                     </table>
                 </div>
 
+                <!-- User details inputs -->
                 <div class="row py-4">
                     <div class="form-group col-sm-6">
                         <label for="phone">Phone Number</label>
+                        <!-- Phone number input -->
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">+880</span>
@@ -90,6 +98,7 @@
 
                     <div class="form-group col-sm-6">
                         <label for="address">Address</label>
+                        <!-- Address selection -->
                         <select class="form-control" id="address" name="address">
                             <option value=" ">Select a division</option>
                             <option value="Dhaka">Dhaka</option>
@@ -104,14 +113,16 @@
                 {{-- Table Ends --}}
 
                 <!-- Checkout Button (Centered) -->
-                <div class="row justify-content-center">
+                <div class="row justify-content-end">
                     <div class="col-md-6 text-center">
-                        <button type="submit" class="btn btn-primary">Checkout</button>
+                        <button type="submit" class="btn btn-lg btn-outline-success">Checkout</button>
                     </div>
                 </div>
-            </div>
-        </form>
-    @endif
+            @endif
+        </div>
+    </form>
+    
+    <!-- Script section -->
     @push('script')
     <script>
         const removeFromCart = document.querySelectorAll('.remove-btn');
