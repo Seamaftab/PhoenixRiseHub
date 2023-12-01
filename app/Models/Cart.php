@@ -13,7 +13,12 @@ class Cart extends Model
 
     public function cartItems()
     {
-        return $this->hasMany(CartItems::class);
+        return $this->hasMany(CartItem::class);
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
     }
 
     public function user()

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cart;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -24,7 +24,7 @@ class CartController extends Controller
             $quantity = $request->quantity;
 
             $cart = auth()->user()->cart()->firstOrCreate([
-                'user_id' => auth()->user()->id
+                'user_id' => auth()->id()
             ]);
 
             $item = $cart->cartItems()->where('product_id', $product)->first();

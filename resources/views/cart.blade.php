@@ -4,7 +4,7 @@
     <form action="{{ route('orders.store') }}" method="POST">
         @csrf
         <div class="container mt-4">
-            @if($bags->cartItems->isEmpty())
+            @if(!$bags || $bags->cartItems->isEmpty())
             <div class="row">
                 <div class="col-md-6">
                     <a href="{{ route('welcome') }}" class="btn btn-outline-dark">Back to Home</a>
@@ -115,7 +115,7 @@
                 <!-- Checkout Button (Centered) -->
                 <div class="row justify-content-end">
                     <div class="col-md-6 text-center">
-                        <button type="submit" class="btn btn-lg btn-outline-success">Checkout</button>
+                        <button type="submit" class="btn btn-lg btn-outline-success">Place Order</button>
                     </div>
                 </div>
             @endif
