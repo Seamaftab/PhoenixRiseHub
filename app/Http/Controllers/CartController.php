@@ -17,11 +17,13 @@ class CartController extends Controller
 
     public function store(Request $request)
     {
-        try {
+        try 
+        {
             DB::beginTransaction();
 
             $product = $request->product_id;
             $quantity = $request->quantity;
+            $price = $request->price;
 
             $cart = auth()->user()->cart()->firstOrCreate([
                 'user_id' => auth()->id()
@@ -39,6 +41,7 @@ class CartController extends Controller
             {
                 $cart->cartItems()->create([
                     'product_id' => $product,
+                    'price' => $price,
                     'quantity' => $quantity
                 ]);
             }

@@ -63,6 +63,7 @@
                         </div>
 
                         <input type="hidden" name="product_id" value="{{ $product->id }}">
+                        <input type="hidden" name="price" value="{{ $product->price }}">
                         <button type="submit" class="btn btn-primary">Add to Cart</button>
                     </form>
                 </div>

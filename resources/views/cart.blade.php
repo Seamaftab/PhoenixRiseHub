@@ -62,6 +62,7 @@
                                         </div>
                                     </td>
                                     <td class="unit-price">{{ $item->product->price }}</td>
+                                    <input type="hidden" name="products[{{ $index }}][price]" value="{{ $item->product->price }}">
                                     <td class="price">{{ $item->product->price * $item->quantity }}</td>
                                     <!-- Remove button -->
                                     <td class="remove-btn" data-id="{{$item->id}}">

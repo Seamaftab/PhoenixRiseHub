@@ -45,8 +45,12 @@ Route::middleware('auth')->group(function()
 
     Route::resource('/carts', CartController::class);
 
+    //Orders
+    Route::get('/orders/cancelled', [OrderController::class, 'cancelled_orders'])->name('cancelled');
     Route::resource('/orders', OrderController::class);
-
+    Route::patch('/orders/{order}/restore', [OrderController::class, 'restore'])->name('orders.restored');
+    Route::delete('/orders/{order}', [OrderController::class, 'cancel_order'])->name('orders.cancel');
+    Route::delete('/orders/{order}/delete', [OrderController::class, 'delete'])->name('orders.remove');
     Route::get('/order_confirmed', [OrderController::class, 'confirmed'])->name('order_confirmed');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
