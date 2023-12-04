@@ -19,7 +19,6 @@ return new class extends Migration
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by');
             $table->timestamps();
-            $table->softDeletes();
 
             $table->foreign('src_id')->references('id')->on('src');
             $table->foreign('created_by')->references('id')->on('users');

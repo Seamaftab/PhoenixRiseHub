@@ -16,13 +16,14 @@ return new class extends Migration
             $table->string('title');
             $table->tinyInteger('status');
             $table->unsignedBigInteger('forward_to');
+            $table->unsignedBigInteger('sent_by');
             $table->text('note');
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by');
             $table->timestamps();
-            $table->softDeletes();
 
             $table->foreign('forward_to')->references('id')->on('roles');
+            $table->foreign('sent_by')->references('id')->on('roles');
             $table->foreign('created_by')->references('id')->on('users');
             $table->foreign('updated_by')->references('id')->on('users');
         });

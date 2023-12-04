@@ -7,6 +7,8 @@ use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PurchaseRequestController;
+use App\Http\Controllers\SrcController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -52,6 +54,12 @@ Route::middleware('auth')->group(function()
     Route::delete('/orders/{order}', [OrderController::class, 'cancel_order'])->name('orders.cancel');
     Route::delete('/orders/{order}/delete', [OrderController::class, 'delete'])->name('orders.remove');
     Route::get('/order_confirmed', [OrderController::class, 'confirmed'])->name('order_confirmed');
+
+    //Purchase Requests
+    Route::resource('/purchaseRequests', PurchaseRequestController::class);
+
+    //Stock Record Cart
+    Route::resource('/src', SrcController::class);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

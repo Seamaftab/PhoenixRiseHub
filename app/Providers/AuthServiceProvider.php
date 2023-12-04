@@ -6,6 +6,7 @@ namespace App\Providers;
 
 use App\Policies\OrderPolicy;
 use App\Policies\ProductPolicy;
+use App\Policies\PurchasePolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
@@ -38,5 +39,13 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('view_orders', [OrderPolicy::class, 'view']);
         Gate::define('update_orders', [OrderPolicy::class, 'update']);
         Gate::define('delete_orders', [OrderPolicy::class, 'delete']);
+
+        //purchase
+        Gate::define('admin_view', [PurchasePolicy::class, 'viewAny']);
+        Gate::define('view_purchase_request', [PurchasePolicy::class, 'view']);
+        Gate::define('create_purchase_request', [PurchasePolicy::class, 'create']);
+        Gate::define('update_purchase_request', [PurchasePolicy::class, 'update']);
+        Gate::define('delete_purchase_request', [PurchasePolicy::class, 'delete']);
+
     }
 }

@@ -37,6 +37,11 @@ class Product extends Model
         return $this->hasMany(OrderItem::class);
     }
 
+    public function stocks()
+    {
+        return $this->hasMany(Src::class);
+    }
+
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by');

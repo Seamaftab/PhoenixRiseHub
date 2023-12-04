@@ -20,7 +20,6 @@ return new class extends Migration
             $table->float('estimated_cost',8,2);
             $table->unsignedBigInteger('updated_by');
             $table->timestamps();
-            $table->softDeletes();
 
             $table->foreign('purchase_request_id')->references('id')->on('purchase_requests');
             $table->foreign('product_id')->references('id')->on('products');
