@@ -16,7 +16,7 @@ class PurchaseRequestController extends Controller
     {
         $this->authorize('view_purchase_request');
 
-        $purchaseRequests = PurchaseRequest::where('status', 0)->get();
+        $purchaseRequests = PurchaseRequest::with('purchaseRequestItem')->get();
         return view('components.backend.pages.purchaseRequests.index', compact('purchaseRequests'));
     }
 
@@ -63,32 +63,38 @@ class PurchaseRequestController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(PurchaseRequest $purchaseRequest)
+    public function show($purchaseRequest)
     {
-        dd($purchaseRequest);
+        $purchaseRequest = PurchaseRequest::with('purchaseRequestItem')->find($purchaseRequest);
+        return view('components.backend.pages.purchaseRequests.show', compact('purchaseRequest'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(PurchaseRequest $purchaseRequest)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, PurchaseRequest $purchaseRequest)
     {
-        //
+        $this->authorize('update_purchase_request');
+
+        $purchaseRequest->update([
+            'status'=> $request->status,
+        ]);
+
+        return redirect()->route('purchaseRequests.index')->with('success', 'Purchase request status updated successfully.');
+    }
+
+    public function srcInfo($info)
+    {
+        $purchaseRequest = PurchaseRequest::find($info);
+        $purchaseRequestItem = $purchaseRequest->purchaseRequestItem;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(PurchaseRequest $purchaseRequest)
+    public function destroy($purchaseRequest)
     {
-        //
+        $purchaseRequest = PurchaseRequest::find($purchaseRequest);
+        $purchaseRequest->purchaseRequestItem()->delete();
+        $purchaseRequest->delete();
+
+        return redirect()->back();
     }
 }

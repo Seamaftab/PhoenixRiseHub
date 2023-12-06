@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         //Stock Record Cart
-        Schema::create('src', function (Blueprint $table) {
+        Schema::create('srcs', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('stock');

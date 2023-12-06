@@ -16,6 +16,11 @@ class PurchaseRequest extends Model
         return $this->belongsTo(Role::class);
     }
 
+    public function purchaseRequestItem()
+    {
+        return $this->hasOne(PurchaseRequestItem::class);
+    }
+
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by');

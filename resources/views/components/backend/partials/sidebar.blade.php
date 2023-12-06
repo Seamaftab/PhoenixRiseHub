@@ -28,7 +28,8 @@
                                 <a class="nav-link" href="{{route('products.index')}}">Products</a>
                                 <a class="nav-link" href="{{route('categories.index')}}">Categories</a>
                                 <a class="nav-link" href="{{route('orders.index')}}">Orders</a>
-                                <a class="nav-link" href="password.html">src</a>
+                                <a class="nav-link" href="{{route('purchaseRequests.index')}}">Purchase Requests</a>
+                                <a class="nav-link" href="{{route('src.index')}}">Stock Record Carts</a>
                             </nav>
                         </div>
                     </nav>

@@ -2,46 +2,73 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
+use App\Models\PurchaseRequest;
+use App\Models\PurchaseRequestItem;
 use App\Models\Src;
+use App\Models\SrcTransaction;
 use Illuminate\Http\Request;
 
 class SrcController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
-        //
+        $srcRecords = Src::with('product')->get();
+        return view('components.backend.pages.stockRecordCart.index', compact('srcRecords'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $user = auth()->user();
+        $purchaseRequest = PurchaseRequest::where('sent_by', $user->id)->where('status', 1)->first();
+
+        if ($purchaseRequest && $purchaseRequest->purchaseRequestItem) 
+        {
+            $product = Product::findOrFail($purchaseRequest->purchaseRequestItem->product_id);
+            return view('components.backend.pages.stockRecordCart.create', compact('product', 'purchaseRequest'));
+        }
+        else
+        {
+            return redirect()->back()->with('error', 'You do not have an accepted request to create a stock record.');
+        }
+        
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $src = Src::create([
+            'product_id' => $request->product_id,
+            'stock' => $request->stock,
+            'status' => $request->status,
+            'created_by' => auth()->user()->id,
+            'updated_by' => auth()->user()->id,
+        ]);
+
+        SrcTransaction::create([
+            'srcs_id' => $src->id,
+            'quantity' => $request->stock,
+            'status' => 1,
+            'created_by' => auth()->user()->id,
+            'updated_by' => auth()->user()->id,
+        ]);
+
+        $purchaseRequest = PurchaseRequest::whereHas('purchaseRequestItem', function ($req) use ($request) 
+        {
+            $req->where('product_id', $request->product_id);
+        })->first();
+
+        $purchaseRequest->purchaseRequestItem()->delete();
+        $purchaseRequest->delete();
+
+        return redirect()->route('src.index')->with('success', 'Stock record created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Src $src)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Src $src)
     {
         //

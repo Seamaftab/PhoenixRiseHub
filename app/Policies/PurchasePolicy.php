@@ -31,7 +31,7 @@ class PurchasePolicy
 
     public function delete(User $user)
     {
-        return $user->isAdmin();
+        return $user->isAdmin() || $user->isModerator();
     }
 
     // public function delete(User $user, PurchaseRequest $purchaseRequest)

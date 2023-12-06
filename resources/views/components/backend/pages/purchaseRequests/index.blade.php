@@ -18,11 +18,9 @@
                                 <tr>
                                     <th>Title</th>
                                     <th>Sent By</th>
-                                    <th>Note</th>
+                                    <th>Product</th>
                                     <th>Status</th>
-                                    @can('update_purchase_request')
-                                        <th>Action</th>
-                                    @endcan
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -30,23 +28,36 @@
                                     <tr>
                                         <td>{{ $purchaseRequest->title }}</td>
                                         <td>{{ $purchaseRequest->createdBy->name }}</td>
-                                        <td>{{ $purchaseRequest->note }}</td>
+                                        <td>
+                                            {{ $purchaseRequest->purchaseRequestItem->product_title }} <br>
+                                            <b>Quantity :</b> {{ $purchaseRequest->purchaseRequestItem->quantity }}
+                                        </td>
                                         <td>
                                             {!! $purchaseRequest->status == 0 ? 'Pending' : 
                                             ($purchaseRequest->status == 1 ? 'Accepted' : 'Rejected')!!}
                                         </td>
-                                        @can('update_purchase_request')
-                                            <td>
+                                        <td>
+                                            @can('update_purchase_request')
                                                 @if($purchaseRequest->status === 0)
-                                                    <form method="POST" action="{{ route('purchaseRequests.update', $purchaseRequest->id) }}">
+                                                    <form method="POST" action="{{ route('purchaseRequests.update', $purchaseRequest) }}" class="d-inline">
                                                         @csrf
                                                         @method('PUT')
-                                                        <button type="submit" class="btn btn-success" name="status" value="accepted">Accept</button>
-                                                        <button type="submit" class="btn btn-danger" name="status" value="rejected">Reject</button>
+                                                        <button type="submit" class="btn btn-success btn-sm" name="status" value="1">Accept</button>
+                                                        <button type="submit" class="btn btn-danger btn-sm" name="status" value="2">Reject</button>
                                                     </form>
                                                 @endif
-                                            </td>
-                                        @endcan
+                                            @endcan
+                                            @can('delete_purchase_request')
+                                                @if($purchaseRequest->status !== 1)
+                                                    <form method="POST" action="{{ route('purchaseRequests.destroy', $purchaseRequest) }}" class="d-inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                                    </form>
+                                                @endif
+                                            @endcan
+                                            <a href="{{ route('purchaseRequests.show', $purchaseRequest->id) }}" class="btn btn-primary btn-sm" class="d-inline">Show</a>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
